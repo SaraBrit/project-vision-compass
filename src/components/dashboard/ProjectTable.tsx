@@ -8,8 +8,10 @@ import {
   TableBody, 
   TableCell 
 } from '@/components/ui/table';
-import { Project, getStatusColor, getPriorityColor } from '@/data/mockData';
+import { Project, getStatusColor, getPriorityColor, getPhaseColor } from '@/data/mockData';
 import ProgressBar from './ProgressBar';
+import { t } from '@/utils/translations';
+import { MapPin, Shield } from 'lucide-react';
 
 interface ProjectTableProps {
   projects: Project[];
@@ -18,7 +20,7 @@ interface ProjectTableProps {
 const ProjectTable: React.FC<ProjectTableProps> = ({ projects }) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', { 
+    return new Intl.DateTimeFormat('fr-FR', { 
       month: 'short',
       day: 'numeric', 
       year: 'numeric' 
@@ -28,20 +30,22 @@ const ProjectTable: React.FC<ProjectTableProps> = ({ projects }) => {
   return (
     <div className="dashboard-card overflow-hidden animate-fade-in animate-delayed" style={{ '--delay': 6 } as React.CSSProperties}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold">All Projects</h3>
-        <a href="#" className="text-sm text-primary hover:underline">View all</a>
+        <h3 className="font-semibold">{t('allProjects')}</h3>
+        <a href="#" className="text-sm text-primary hover:underline">{t('viewAll')}</a>
       </div>
       
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Due Date</TableHead>
-              <TableHead>Progress</TableHead>
-              <TableHead>Priority</TableHead>
-              <TableHead>Budget</TableHead>
+              <TableHead>{t('name')}</TableHead>
+              <TableHead>{t('status')}</TableHead>
+              <TableHead>{t('dueDate')}</TableHead>
+              <TableHead>{t('progress')}</TableHead>
+              <TableHead>{t('priority')}</TableHead>
+              <TableHead>{t('phase')}</TableHead>
+              <TableHead>{t('budget')}</TableHead>
+              <TableHead>{t('site')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -50,7 +54,7 @@ const ProjectTable: React.FC<ProjectTableProps> = ({ projects }) => {
                 <TableCell className="font-medium">
                   {project.name}
                   <div className="text-xs text-muted-foreground mt-1">
-                    {project.tasks.completed}/{project.tasks.total} tasks
+                    {project.tasks.completed}/{project.tasks.total} {t('tasks').toLowerCase()}
                   </div>
                 </TableCell>
                 <TableCell>
@@ -64,14 +68,35 @@ const ProjectTable: React.FC<ProjectTableProps> = ({ projects }) => {
                 </TableCell>
                 <TableCell>
                   <span className={`font-medium ${getPriorityColor(project.priority)}`}>
-                    {project.priority}
+                    {t(project.priority.toLowerCase())}
                   </span>
                 </TableCell>
                 <TableCell>
-                  <div>${project.budget.spent.toLocaleString()}</div>
+                  {project.phase && (
+                    <span className={`text-xs px-2 py-1 rounded-full ${getPhaseColor(project.phase)}`}>
+                      {project.phase}
+                    </span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div>€{project.budget.spent.toLocaleString('fr-FR')}</div>
                   <div className="text-xs text-muted-foreground">
-                    of ${project.budget.allocated.toLocaleString()}
+                    / €{project.budget.allocated.toLocaleString('fr-FR')}
                   </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center text-xs text-muted-foreground">
+                    <MapPin className="h-3 w-3 mr-1" />
+                    <span className="truncate max-w-[100px]" title={project.siteLocation}>
+                      {project.siteLocation}
+                    </span>
+                  </div>
+                  {project.safetyIncidents !== undefined && (
+                    <div className="flex items-center text-xs mt-1">
+                      <Shield className={`h-3 w-3 mr-1 ${project.safetyIncidents > 0 ? 'text-status-stuck' : 'text-status-done'}`} />
+                      <span>{t('safety')}: {project.safetyIncidents}</span>
+                    </div>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

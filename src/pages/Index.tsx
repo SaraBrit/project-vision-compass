@@ -7,6 +7,7 @@ import ProjectSummary from '@/components/dashboard/ProjectSummary';
 import PerformanceChart from '@/components/dashboard/PerformanceChart';
 import ProjectTable from '@/components/dashboard/ProjectTable';
 import { mockProjects, getStatusCount } from '@/data/mockData';
+import { t } from '@/utils/translations';
 
 const Index = () => {
   const statusCounts = getStatusCount();
@@ -21,7 +22,7 @@ const Index = () => {
         
         <main className="flex-1 overflow-y-auto p-6">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6 animate-fade-in">Project Dashboard</h1>
+            <h1 className="text-2xl font-bold mb-6 animate-fade-in">{t('projectDashboard')}</h1>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <StatusCard 

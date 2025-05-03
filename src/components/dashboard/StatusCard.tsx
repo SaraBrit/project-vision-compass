@@ -7,6 +7,7 @@ import {
   PlayCircle 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { t } from '@/utils/translations';
 
 interface StatusCardProps {
   title: string;
@@ -46,6 +47,17 @@ const StatusCard: React.FC<StatusCardProps> = ({ title, count, type, delay }) =>
     }
   };
 
+  // Translate the title
+  const translatedTitle = (() => {
+    switch(title) {
+      case 'Completed': return t('completed');
+      case 'In Progress': return t('inProgress');
+      case 'In Review': return t('inReview');
+      case 'Stuck': return t('stuck');
+      default: return title;
+    }
+  })();
+
   return (
     <div 
       className={cn(
@@ -58,7 +70,7 @@ const StatusCard: React.FC<StatusCardProps> = ({ title, count, type, delay }) =>
         {getIcon()}
       </div>
       <div>
-        <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
+        <h3 className="text-sm font-medium text-muted-foreground">{translatedTitle}</h3>
         <p className="text-2xl font-semibold">{count}</p>
       </div>
     </div>

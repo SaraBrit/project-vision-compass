@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { t } from '@/utils/translations';
 
 interface ProgressBarProps {
   progress: number;
@@ -33,7 +34,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       <div className="flex justify-between items-center mb-1">
         {showLabel && (
           <span className="text-xs font-medium text-muted-foreground">
-            Progress
+            {t('progress')}
           </span>
         )}
         <span className="text-xs font-medium text-muted-foreground">

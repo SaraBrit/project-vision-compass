@@ -1,10 +1,21 @@
 
-import React from 'react';
-import { Search, Bell, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Bell, User, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { t, setLanguage } from '@/utils/translations';
 
 const Navbar = () => {
+  const [language, setCurrentLanguage] = useState<'en' | 'fr'>('en');
+
+  const toggleLanguage = () => {
+    const newLanguage = language === 'en' ? 'fr' : 'en';
+    setLanguage(newLanguage);
+    setCurrentLanguage(newLanguage);
+    // Force re-render of the entire app
+    window.location.reload();
+  };
+
   return (
     <header className="bg-white border-b border-border sticky top-0 z-50">
       <div className="flex items-center justify-between px-6 h-16">
@@ -16,13 +27,22 @@ const Navbar = () => {
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search for projects, tasks, or team members..."
+              placeholder="Rechercher des projets, tâches, ou membres d'équipe..."
               className="pl-8 bg-muted/50 border-none"
             />
           </div>
         </div>
         
         <div className="flex items-center gap-4">
+          <Button 
+            variant="outline"
+            size="sm"
+            onClick={toggleLanguage}
+            className="text-xs"
+          >
+            {language === 'en' ? 'FR' : 'EN'}
+          </Button>
+
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />
             <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-status-stuck"></span>
